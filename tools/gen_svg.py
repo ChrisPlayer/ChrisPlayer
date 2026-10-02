@@ -78,35 +78,54 @@ blink = "4.6;4.6;0.4;4.6;4.6;0.4;4.6;4.6"
 blink_k = "0;0.46;0.48;0.5;0.9;0.92;0.94;1"
 pupil = "3.6;3.6;0.3;3.6;3.6;0.3;3.6;3.6"
 
-cat = f'''<g transform="translate({CAT_X} {WALL})" fill="{CAT}">
-  <path d="{tails[0]}" fill="none" stroke="{CAT}" stroke-width="9" stroke-linecap="round">
+FUR, FUR_D, BELLY, PINK, INK = "#c38c5f", "#a3714b", "#e6d7c2", "#cf9e95", "#2a2321"
+eye_ry = "8.5;8.5;0.9;8.5;8.5;0.9;8.5;8.5"
+hl_op = "1;1;0;1;1;0;1;1"
+
+def eye(x):
+    return (f'<ellipse cx="{x}" cy="-94" rx="8" ry="8.5" fill="{INK}"><animate attributeName="ry" values="{eye_ry}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>'
+            f'<g fill="#fff"><animate attributeName="opacity" values="{hl_op}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/>'
+            f'<circle cx="{x - 2.6}" cy="-97.5" r="3"/><circle cx="{x + 3}" cy="-90.5" r="1.3"/></g>')
+
+cat = f'''<g transform="translate({CAT_X} {WALL}) scale(1.12)">
+  <path d="{tails[0]}" fill="none" stroke="{FUR}" stroke-width="13" stroke-linecap="round">
     <animate attributeName="d" values="{tail_vals}" dur="6s" repeatCount="indefinite" calcMode="spline"
       keySplines="0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1;0.45 0 0.55 1"/>
   </path>
-  <path d="M-46 0 C-58 -36 -46 -78 -22 -96 L22 -96 C46 -78 58 -36 46 0 Z"/>
-  <ellipse cx="-15" cy="-2" rx="11" ry="5"/><ellipse cx="15" cy="-2" rx="11" ry="5"/>
+  <path d="M-44 0 C-52 -30 -40 -64 0 -66 C40 -64 52 -30 44 0 Z" fill="{FUR}"/>
+  <path d="M-40 -30 q8 -4 12 2 M40 -30 q-8 -4 -12 2 M-43 -16 q8 -4 12 2 M43 -16 q-8 -4 -12 2" stroke="{FUR_D}" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="0" cy="-28" rx="20" ry="25" fill="{BELLY}"/>
+  <g fill="{BELLY}"><ellipse cx="-14" cy="-4" rx="11" ry="7"/><ellipse cx="14" cy="-4" rx="11" ry="7"/></g>
+  <path d="M-17 -2 v-4 M-11 -2 v-4 M11 -2 v-4 M17 -2 v-4" stroke="#c9b8a2" stroke-width="1.4" stroke-linecap="round"/>
   <g>
-    <animateTransform attributeName="transform" type="rotate" values="0 0 -96;0 0 -96;-9 0 -96;-9 0 -96;0 0 -96;0 0 -96"
+    <animateTransform attributeName="transform" type="rotate" values="0 0 -62;0 0 -62;-10 0 -62;-10 0 -62;0 0 -62;0 0 -62"
       keyTimes="0;0.55;0.6;0.8;0.85;1" dur="11s" repeatCount="indefinite"/>
-    <ellipse cx="0" cy="-118" rx="33" ry="28"/>
-    <path d="M-30 -126 L-25 -160 L-6 -141 Z"/>
-    <path d="M30 -126 L25 -160 L6 -141 Z">
-      <animateTransform attributeName="transform" type="rotate" values="0 18 -138;0 18 -138;14 18 -138;0 18 -138;0 18 -138"
+    <g>
+      <path d="M-42 -100 Q-50 -150 -10 -124 Z" fill="{FUR}" stroke="{FUR}" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M-36 -106 Q-41 -136 -17 -122 Z" fill="{PINK}"/>
+    </g>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" values="0 24 -116;0 24 -116;16 24 -116;0 24 -116;0 24 -116"
         keyTimes="0;0.7;0.72;0.75;1" dur="7s" repeatCount="indefinite"/>
-    </path>
-    <g stroke="{CAT}" stroke-width="1.2" stroke-linecap="round">
-      <line x1="-24" y1="-108" x2="-58" y2="-114"/><line x1="-24" y1="-104" x2="-58" y2="-102"/><line x1="-24" y1="-100" x2="-54" y2="-91"/>
-      <line x1="24" y1="-108" x2="58" y2="-114"/><line x1="24" y1="-104" x2="58" y2="-102"/><line x1="24" y1="-100" x2="54" y2="-91"/>
+      <path d="M42 -100 Q50 -150 10 -124 Z" fill="{FUR}" stroke="{FUR}" stroke-width="6" stroke-linejoin="round"/>
+      <path d="M36 -106 Q41 -136 17 -122 Z" fill="{PINK}"/>
     </g>
-    <g fill="{EYE}">
-      <ellipse cx="-12" cy="-120" rx="5.6" ry="4.6"><animate attributeName="ry" values="{blink}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>
-      <ellipse cx="12" cy="-120" rx="5.6" ry="4.6"><animate attributeName="ry" values="{blink}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>
-    </g>
-    <g fill="{CAT}">
-      <ellipse cx="-12" cy="-120" rx="1.4" ry="3.6"><animate attributeName="ry" values="{pupil}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>
-      <ellipse cx="12" cy="-120" rx="1.4" ry="3.6"><animate attributeName="ry" values="{pupil}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>
+    <ellipse cx="0" cy="-90" rx="48" ry="39" fill="{FUR}"/>
+    <path d="M-8 -127 q2 8 0 14 M0 -128 v15 M8 -127 q-2 8 0 14" stroke="{FUR_D}" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="-11" cy="-74" rx="15" ry="11" fill="{BELLY}"/><ellipse cx="11" cy="-74" rx="15" ry="11" fill="{BELLY}"/>
+    <g fill="{PINK}" opacity="0.55"><ellipse cx="-31" cy="-78" rx="8" ry="4.5"/><ellipse cx="31" cy="-78" rx="8" ry="4.5"/></g>
+    {eye(-18)}{eye(18)}
+    <path d="M-3.6 -82 h7.2 l-3.6 4 Z" fill="{PINK}" stroke="{PINK}" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M-7 -74 q3.5 4 7 0 q3.5 4 7 0" stroke="{INK}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <g stroke="#e9dfd0" stroke-width="1.1" stroke-linecap="round" opacity="0.8">
+      <line x1="-28" y1="-76" x2="-60" y2="-82"/><line x1="-28" y1="-72" x2="-60" y2="-70"/>
+      <line x1="28" y1="-76" x2="60" y2="-82"/><line x1="28" y1="-72" x2="60" y2="-70"/>
     </g>
   </g>
+  <path d="M0 0 c-3 -3 -7 -1 -7 2 c0 3 4 5 7 8 c3 -3 7 -5 7 -8 c0 -3 -4 -5 -7 -2 Z" fill="{PINK}" opacity="0">
+    <animateTransform attributeName="transform" type="translate" values="34 -130;34 -130;48 -175;48 -175" keyTimes="0;0.6;0.85;1" dur="10s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.6;0.66;0.85;1" dur="10s" repeatCount="indefinite"/>
+  </path>
 </g>'''
 
 bricks = []
