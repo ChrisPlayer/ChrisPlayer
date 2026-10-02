@@ -42,30 +42,25 @@
       keyTimes="0;0.55;0.6;0.8;0.85;1" dur="11s" repeatCount="indefinite"/>
     <g>
       <path d="M-42 -100 Q-50 -150 -10 -124 Z" fill="#c38c5f" stroke="#c38c5f" stroke-width="6" stroke-linejoin="round"/>
-      <path d="M-36 -106 Q-41 -136 -17 -122 Z" fill="#cf9e95"/>
+      <path d="M-36 -106 Q-41 -136 -17 -122 Z" fill="#8e6656"/>
     </g>
     <g>
       <animateTransform attributeName="transform" type="rotate" values="0 24 -116;0 24 -116;16 24 -116;0 24 -116;0 24 -116"
         keyTimes="0;0.7;0.72;0.75;1" dur="7s" repeatCount="indefinite"/>
       <path d="M42 -100 Q50 -150 10 -124 Z" fill="#c38c5f" stroke="#c38c5f" stroke-width="6" stroke-linejoin="round"/>
-      <path d="M36 -106 Q41 -136 17 -122 Z" fill="#cf9e95"/>
+      <path d="M36 -106 Q41 -136 17 -122 Z" fill="#8e6656"/>
     </g>
-    <ellipse cx="0" cy="-90" rx="48" ry="39" fill="#c38c5f"/>
+    <ellipse cx="0" cy="-90" rx="46" ry="37" fill="#c38c5f"/>
     <path d="M-8 -127 q2 8 0 14 M0 -128 v15 M8 -127 q-2 8 0 14" stroke="#a3714b" stroke-width="3" fill="none" stroke-linecap="round"/>
     <ellipse cx="-11" cy="-74" rx="15" ry="11" fill="#e6d7c2"/><ellipse cx="11" cy="-74" rx="15" ry="11" fill="#e6d7c2"/>
-    <g fill="#cf9e95" opacity="0.55"><ellipse cx="-31" cy="-78" rx="8" ry="4.5"/><ellipse cx="31" cy="-78" rx="8" ry="4.5"/></g>
-    <ellipse cx="-18" cy="-94" rx="8" ry="8.5" fill="#2a2321"><animate attributeName="ry" values="8.5;8.5;0.9;8.5;8.5;0.9;8.5;8.5" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/></ellipse><g fill="#fff"><animate attributeName="opacity" values="1;1;0;1;1;0;1;1" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/><circle cx="-20.6" cy="-97.5" r="3"/><circle cx="-15" cy="-90.5" r="1.3"/></g><ellipse cx="18" cy="-94" rx="8" ry="8.5" fill="#2a2321"><animate attributeName="ry" values="8.5;8.5;0.9;8.5;8.5;0.9;8.5;8.5" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/></ellipse><g fill="#fff"><animate attributeName="opacity" values="1;1;0;1;1;0;1;1" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/><circle cx="15.4" cy="-97.5" r="3"/><circle cx="21" cy="-90.5" r="1.3"/></g>
-    <path d="M-3.6 -82 h7.2 l-3.6 4 Z" fill="#cf9e95" stroke="#cf9e95" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M-7 -74 q3.5 4 7 0 q3.5 4 7 0" stroke="#2a2321" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <ellipse cx="-18" cy="-94" rx="6.4" ry="6.6" fill="#2a2321"><animate attributeName="ry" values="6.6;6.6;0.8;6.6;6.6;0.8;6.6;6.6" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/></ellipse><g fill="#fff"><animate attributeName="opacity" values="1;1;0;1;1;0;1;1" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/><circle cx="-20" cy="-96.5" r="1.7"/></g><ellipse cx="18" cy="-94" rx="6.4" ry="6.6" fill="#2a2321"><animate attributeName="ry" values="6.6;6.6;0.8;6.6;6.6;0.8;6.6;6.6" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/></ellipse><g fill="#fff"><animate attributeName="opacity" values="1;1;0;1;1;0;1;1" keyTimes="0;0.46;0.48;0.5;0.9;0.92;0.94;1" dur="9s" repeatCount="indefinite"/><circle cx="16" cy="-96.5" r="1.7"/></g>
+    <path d="M-3.6 -82 h7.2 l-3.6 4 Z" fill="#8e6656" stroke="#8e6656" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M-5 -75 q2.5 2.5 5 0 q2.5 2.5 5 0" stroke="#2a2321" stroke-width="1.6" fill="none" stroke-linecap="round"/>
     <g stroke="#e9dfd0" stroke-width="1.1" stroke-linecap="round" opacity="0.8">
       <line x1="-28" y1="-76" x2="-60" y2="-82"/><line x1="-28" y1="-72" x2="-60" y2="-70"/>
       <line x1="28" y1="-76" x2="60" y2="-82"/><line x1="28" y1="-72" x2="60" y2="-70"/>
     </g>
   </g>
-  <path d="M0 0 c-3 -3 -7 -1 -7 2 c0 3 4 5 7 8 c3 -3 7 -5 7 -8 c0 -3 -4 -5 -7 -2 Z" fill="#cf9e95" opacity="0">
-    <animateTransform attributeName="transform" type="translate" values="34 -130;34 -130;48 -175;48 -175" keyTimes="0;0.6;0.85;1" dur="10s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.6;0.66;0.85;1" dur="10s" repeatCount="indefinite"/>
-  </path>
 </g>
   <rect width="1200" height="380" filter="url(#grain)"/>
 </g>

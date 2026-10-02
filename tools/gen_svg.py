@@ -78,14 +78,14 @@ blink = "4.6;4.6;0.4;4.6;4.6;0.4;4.6;4.6"
 blink_k = "0;0.46;0.48;0.5;0.9;0.92;0.94;1"
 pupil = "3.6;3.6;0.3;3.6;3.6;0.3;3.6;3.6"
 
-FUR, FUR_D, BELLY, PINK, INK = "#c38c5f", "#a3714b", "#e6d7c2", "#cf9e95", "#2a2321"
-eye_ry = "8.5;8.5;0.9;8.5;8.5;0.9;8.5;8.5"
+FUR, FUR_D, BELLY, PINK, INK = "#c38c5f", "#a3714b", "#e6d7c2", "#8e6656", "#2a2321"
+eye_ry = "6.6;6.6;0.8;6.6;6.6;0.8;6.6;6.6"
 hl_op = "1;1;0;1;1;0;1;1"
 
 def eye(x):
-    return (f'<ellipse cx="{x}" cy="-94" rx="8" ry="8.5" fill="{INK}"><animate attributeName="ry" values="{eye_ry}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>'
+    return (f'<ellipse cx="{x}" cy="-94" rx="6.4" ry="6.6" fill="{INK}"><animate attributeName="ry" values="{eye_ry}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/></ellipse>'
             f'<g fill="#fff"><animate attributeName="opacity" values="{hl_op}" keyTimes="{blink_k}" dur="9s" repeatCount="indefinite"/>'
-            f'<circle cx="{x - 2.6}" cy="-97.5" r="3"/><circle cx="{x + 3}" cy="-90.5" r="1.3"/></g>')
+            f'<circle cx="{x - 2}" cy="-96.5" r="1.7"/></g>')
 
 cat = f'''<g transform="translate({CAT_X} {WALL}) scale(1.12)">
   <path d="{tails[0]}" fill="none" stroke="{FUR}" stroke-width="13" stroke-linecap="round">
@@ -110,22 +110,17 @@ cat = f'''<g transform="translate({CAT_X} {WALL}) scale(1.12)">
       <path d="M42 -100 Q50 -150 10 -124 Z" fill="{FUR}" stroke="{FUR}" stroke-width="6" stroke-linejoin="round"/>
       <path d="M36 -106 Q41 -136 17 -122 Z" fill="{PINK}"/>
     </g>
-    <ellipse cx="0" cy="-90" rx="48" ry="39" fill="{FUR}"/>
+    <ellipse cx="0" cy="-90" rx="46" ry="37" fill="{FUR}"/>
     <path d="M-8 -127 q2 8 0 14 M0 -128 v15 M8 -127 q-2 8 0 14" stroke="{FUR_D}" stroke-width="3" fill="none" stroke-linecap="round"/>
     <ellipse cx="-11" cy="-74" rx="15" ry="11" fill="{BELLY}"/><ellipse cx="11" cy="-74" rx="15" ry="11" fill="{BELLY}"/>
-    <g fill="{PINK}" opacity="0.55"><ellipse cx="-31" cy="-78" rx="8" ry="4.5"/><ellipse cx="31" cy="-78" rx="8" ry="4.5"/></g>
     {eye(-18)}{eye(18)}
     <path d="M-3.6 -82 h7.2 l-3.6 4 Z" fill="{PINK}" stroke="{PINK}" stroke-width="1.5" stroke-linejoin="round"/>
-    <path d="M-7 -74 q3.5 4 7 0 q3.5 4 7 0" stroke="{INK}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M-5 -75 q2.5 2.5 5 0 q2.5 2.5 5 0" stroke="{INK}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
     <g stroke="#e9dfd0" stroke-width="1.1" stroke-linecap="round" opacity="0.8">
       <line x1="-28" y1="-76" x2="-60" y2="-82"/><line x1="-28" y1="-72" x2="-60" y2="-70"/>
       <line x1="28" y1="-76" x2="60" y2="-82"/><line x1="28" y1="-72" x2="60" y2="-70"/>
     </g>
   </g>
-  <path d="M0 0 c-3 -3 -7 -1 -7 2 c0 3 4 5 7 8 c3 -3 7 -5 7 -8 c0 -3 -4 -5 -7 -2 Z" fill="{PINK}" opacity="0">
-    <animateTransform attributeName="transform" type="translate" values="34 -130;34 -130;48 -175;48 -175" keyTimes="0;0.6;0.85;1" dur="10s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0;0;0.8;0;0" keyTimes="0;0.6;0.66;0.85;1" dur="10s" repeatCount="indefinite"/>
-  </path>
 </g>'''
 
 bricks = []
