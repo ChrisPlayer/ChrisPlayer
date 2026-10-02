@@ -1,161 +1,109 @@
-"""Genere les SVG animes du profil (assets/header.svg, assets/typing.svg).
+"""Genere la banniere animee du profil (assets/header.svg).
 Relancer apres modification : python tools/gen_svg.py
 """
 import os, random
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
 os.makedirs(ROOT, exist_ok=True)
-rnd = random.Random(42)
+rnd = random.Random(7)
 
-# ---------------------------------------------------------------- header
-W, H, HZ = 1200, 320, 232          # largeur, hauteur, ligne d'horizon
-CX = W // 2
+W, H = 1200, 380
+CX, CY = W // 2, 205
+NAME = "CHRIS"
+LOOP = 12  # secondes : trace du contour, remplissage, pause, effacement
+FONT = "'Segoe UI Black', 'Arial Black', 'Helvetica Neue', Arial, sans-serif"
 
-stars = []
-for _ in range(70):
-    x, y = rnd.uniform(10, W - 10), rnd.uniform(8, HZ - 20)
-    if 280 < x < 920 and 40 < y < 200:
-        continue
-    r = rnd.choice([0.8, 1, 1.2, 1.6])
-    d, b = rnd.uniform(2, 5), rnd.uniform(0, 5)
-    stars.append(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r}" fill="#fff">'
-                 f'<animate attributeName="opacity" values="0.15;1;0.15" dur="{d:.1f}s" begin="-{b:.1f}s" repeatCount="indefinite"/></circle>')
+# taches d'aurore floues qui derivent
+blobs = []
+for color, (x, y), r, (dx, dy), d in [
+    ("#7c3aed", (250, 120), 230, (180, 60), 18),
+    ("#06b6d4", (950, 260), 210, (-200, -50), 21),
+    ("#ec4899", (620, 330), 190, (120, -110), 16),
+    ("#2563eb", (820, 60), 170, (-150, 90), 23),
+]:
+    blobs.append(f'<circle cx="{x}" cy="{y}" r="{r}" fill="{color}" opacity="0.55">'
+                 f'<animateTransform attributeName="transform" type="translate" values="0 0;{dx} {dy};0 0" '
+                 f'dur="{d}s" repeatCount="indefinite" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"/></circle>')
 
-# grille du sol : lignes vers le point de fuite + lignes horizontales qui defilent
-grid = [f'<line x1="{CX}" y1="{HZ}" x2="{CX + k * 150}" y2="{H}" />' for k in range(-12, 13)]
-moving, N, DUR = [], 7, 2.4
-for k in range(N):
-    ys = [HZ + (H - HZ) * (t / 10) ** 2.2 for t in range(11)]
-    vals = ";".join(f"{y:.1f}" for y in ys)
-    ops = ";".join(f"{min(1, t / 4):.2f}" for t in range(11))
-    beg = f"-{k * DUR / N:.2f}s"
-    moving.append(f'<line x1="0" x2="{W}" y1="{HZ}" y2="{HZ}">'
-                  f'<animate attributeName="y1" values="{vals}" dur="{DUR}s" begin="{beg}" repeatCount="indefinite"/>'
-                  f'<animate attributeName="y2" values="{vals}" dur="{DUR}s" begin="{beg}" repeatCount="indefinite"/>'
-                  f'<animate attributeName="opacity" values="{ops}" dur="{DUR}s" begin="{beg}" repeatCount="indefinite"/></line>')
+# poussiere lumineuse
+dust = []
+for _ in range(60):
+    x, y = rnd.uniform(0, W), rnd.uniform(0, H)
+    r = rnd.choice([0.7, 1, 1.3, 1.8])
+    d, b = rnd.uniform(14, 30), rnd.uniform(0, 30)
+    tw = rnd.uniform(2, 5)
+    dust.append(f'<circle cx="{x:.0f}" cy="{y:.0f}" r="{r}" fill="#fff">'
+                f'<animateTransform attributeName="transform" type="translate" values="0 0;{rnd.uniform(-60, 60):.0f} {rnd.uniform(-80, -20):.0f}" dur="{d:.0f}s" begin="-{b:.1f}s" repeatCount="indefinite"/>'
+                f'<animate attributeName="opacity" values="0;0.9;0.2;0.9;0" dur="{tw * 3:.1f}s" begin="-{b:.1f}s" repeatCount="indefinite"/></circle>')
 
-# pixels qui montent depuis le sol
-pixels = []
-for _ in range(22):
-    x = rnd.uniform(40, W - 40)
-    s = rnd.choice([3, 4, 5])
-    d, b = rnd.uniform(5, 10), rnd.uniform(0, 10)
-    c = rnd.choice(["#36e2ff", "#ff4fd8", "#ffd319"])
-    pixels.append(f'<rect x="{x:.0f}" y="{H}" width="{s}" height="{s}" fill="{c}">'
-                  f'<animateTransform attributeName="transform" type="translate" values="0 0;{rnd.uniform(-30, 30):.0f} -{H}" dur="{d:.1f}s" begin="-{b:.1f}s" repeatCount="indefinite"/>'
-                  f'<animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.15;0.7;1" dur="{d:.1f}s" begin="-{b:.1f}s" repeatCount="indefinite"/></rect>')
+# timeline du nom (fractions de LOOP)
+k = "0;0.25;0.33;0.85;0.93;1"
+dash = "700;0;0;0;700;700"
+fill = "0;0;1;1;0;0"
 
-# bandes du soleil retro (trous de plus en plus larges vers le bas)
-stripes = []
-y, gap = HZ - 52, 3
-while y < HZ:
-    stripes.append(f'<rect x="0" y="{y:.0f}" width="{W}" height="{gap:.0f}" fill="#000"/>')
-    y += gap + 9
-    gap += 1.6
-
-FONT = "'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
 header = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">
 <defs>
-  <clipPath id="card"><rect width="{W}" height="{H}" rx="18"/></clipPath>
-  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#07021a"/><stop offset="0.6" stop-color="#240845"/><stop offset="1" stop-color="#5a1468"/>
-  </linearGradient>
-  <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#ffd319"/><stop offset="0.55" stop-color="#ff2975"/><stop offset="1" stop-color="#8c1eff"/>
-  </linearGradient>
-  <linearGradient id="title" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect">
-    <stop offset="0" stop-color="#36e2ff"/><stop offset="0.5" stop-color="#ff4fd8"/><stop offset="1" stop-color="#ffd319"/>
-    <animate attributeName="x1" values="0;1;0" dur="6s" repeatCount="indefinite"/>
-    <animate attributeName="x2" values="1;2;1" dur="6s" repeatCount="indefinite"/>
-  </linearGradient>
-  <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
-    <stop offset="0" stop-color="#1a0433"/><stop offset="1" stop-color="#05010f"/>
-  </linearGradient>
-  <mask id="sunMask"><rect width="{W}" height="{H}" fill="#fff"/>{"".join(stripes)}</mask>
-  <clipPath id="aboveHz"><rect width="{W}" height="{HZ}"/></clipPath>
-  <filter id="glow" x="-20%" y="-50%" width="140%" height="200%">
-    <feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  <clipPath id="card"><rect width="{W}" height="{H}" rx="22"/></clipPath>
+  <filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="70"/></filter>
+  <filter id="glow" x="-10%" y="-40%" width="120%" height="180%">
+    <feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
   </filter>
-  <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
-  <style>
-    .glitch {{ animation: glitch 4s steps(1) infinite; }}
-    .g2 {{ animation-delay: -0.15s; }}
-    @keyframes glitch {{
-      0%, 86%, 100% {{ transform: translate(0, 0); opacity: 0; }}
-      88% {{ transform: translate(-6px, 2px); opacity: 0.8; }}
-      90% {{ transform: translate(5px, -2px); opacity: 0.8; }}
-      92% {{ transform: translate(-3px, 0); opacity: 0.6; }}
-      94% {{ transform: translate(0, 0); opacity: 0; }}
-    }}
-    .flicker {{ animation: flicker 5s linear infinite; }}
-    @keyframes flicker {{ 0%, 41%, 43%, 45%, 100% {{ opacity: 1; }} 42%, 44% {{ opacity: 0.55; }} }}
-  </style>
+  <filter id="grain" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0"/>
+  </filter>
+  <linearGradient id="ink" gradientUnits="userSpaceOnUse" x1="250" y1="0" x2="950" y2="0">
+    <stop offset="0" stop-color="#a5f3fc"/><stop offset="0.35" stop-color="#c4b5fd"/>
+    <stop offset="0.7" stop-color="#f9a8d4"/><stop offset="1" stop-color="#fde68a"/>
+    <animateTransform attributeName="gradientTransform" type="translate" values="-300 0;300 0;-300 0" dur="10s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="ring" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="{W}" y2="{H}">
+    <stop offset="0" stop-color="#22d3ee"/><stop offset="0.5" stop-color="#a855f7" stop-opacity="0.15"/><stop offset="1" stop-color="#ec4899"/>
+    <animateTransform attributeName="gradientTransform" type="rotate" values="0 {CX} {H // 2};360 {CX} {H // 2}" dur="8s" repeatCount="indefinite"/>
+  </linearGradient>
+  <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="0.5" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <mask id="nameMask"><text x="{CX}" y="{CY}" font-family="{FONT}" font-weight="900" font-size="150" letter-spacing="22" text-anchor="middle" fill="#fff">{NAME}</text></mask>
+  <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#22d3ee" stop-opacity="0"/><stop offset="0.5" stop-color="#e9d5ff"/><stop offset="1" stop-color="#ec4899" stop-opacity="0"/>
+  </linearGradient>
 </defs>
 <g clip-path="url(#card)">
-  <rect width="{W}" height="{H}" fill="url(#sky)"/>
-  <g>{"".join(stars)}</g>
-  <g clip-path="url(#aboveHz)">
-    <circle cx="{CX}" cy="{HZ}" r="118" fill="#ff2975" opacity="0.35" filter="url(#softGlow)">
-      <animate attributeName="r" values="112;126;112" dur="4s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="{CX}" cy="{HZ}" r="100" fill="url(#sun)" mask="url(#sunMask)"/>
+  <rect width="{W}" height="{H}" fill="#05040d"/>
+  <g filter="url(#blur)">{"".join(blobs)}</g>
+  <rect width="{W}" height="{H}" fill="#05040d" opacity="0.35"/>
+  <g opacity="0.08" stroke="#fff" stroke-width="1">
+    {"".join(f'<line x1="{x}" y1="0" x2="{x}" y2="{H}"/>' for x in range(0, W + 1, 60))}
+    {"".join(f'<line x1="0" y1="{y}" x2="{W}" y2="{y}"/>' for y in range(20, H, 60))}
   </g>
-  <rect y="{HZ}" width="{W}" height="{H - HZ}" fill="url(#floor)"/>
-  <g stroke="#ff2975" stroke-width="1.4" opacity="0.55">{"".join(grid)}</g>
-  <g stroke="#ff4fd8" stroke-width="1.4">{"".join(moving)}</g>
-  <line x1="0" y1="{HZ}" x2="{W}" y2="{HZ}" stroke="#ff9de6" stroke-width="2" filter="url(#glow)"/>
-  <g>{"".join(pixels)}</g>
-  <g font-family="{FONT}" font-weight="900" font-size="104" text-anchor="middle" letter-spacing="16">
-    <text class="glitch" x="{CX}" y="128" fill="#36e2ff">CHRIS</text>
-    <text class="glitch g2" x="{CX}" y="128" fill="#ff2975">CHRIS</text>
-    <text class="flicker" x="{CX}" y="128" fill="url(#title)" filter="url(#glow)">CHRIS</text>
+  <g>{"".join(dust)}</g>
+
+  <g font-family="{FONT}" font-weight="900" font-size="150" letter-spacing="22" text-anchor="middle">
+    <text x="{CX}" y="{CY}" fill="url(#ink)" filter="url(#glow)" opacity="0">{NAME}
+      <animate attributeName="opacity" values="{fill}" keyTimes="{k}" dur="{LOOP}s" repeatCount="indefinite"/>
+    </text>
+    <text x="{CX}" y="{CY}" fill="none" stroke="url(#ink)" stroke-width="2.2" stroke-dasharray="700" stroke-dashoffset="700" filter="url(#glow)">{NAME}
+      <animate attributeName="stroke-dashoffset" values="{dash}" keyTimes="{k}" dur="{LOOP}s" repeatCount="indefinite"/>
+    </text>
   </g>
-  <text x="{CX}" y="170" font-family="{FONT}" font-weight="600" font-size="21" letter-spacing="9" text-anchor="middle" fill="#f5e8ff" opacity="0.92">GAME DEVELOPER · UNITY · C#</text>
+  <g mask="url(#nameMask)">
+    <rect x="-300" y="0" width="260" height="{H}" fill="url(#sweep)" opacity="0.55" transform="skewX(-20)">
+      <animate attributeName="x" values="-300;-300;1500;1500" keyTimes="0;0.4;0.6;1" dur="{LOOP / 2}s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <rect x="{CX - 160}" y="{CY + 42}" width="320" height="2" fill="url(#line)">
+    <animate attributeName="width" values="0;320;320;0" keyTimes="0;0.3;0.85;1" dur="{LOOP}s" repeatCount="indefinite"/>
+    <animate attributeName="x" values="{CX};{CX - 160};{CX - 160};{CX}" keyTimes="0;0.3;0.85;1" dur="{LOOP}s" repeatCount="indefinite"/>
+  </rect>
+
+  <rect width="{W}" height="{H}" filter="url(#grain)"/>
 </g>
+<rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="21" fill="none" stroke="url(#ring)" stroke-width="2"/>
 </svg>
 '''
 
-# ---------------------------------------------------------------- typing
-PHRASES = [
-    ("Je crée des jeux vidéo avec Unity", "#8b5cf6"),
-    ("Un prototype toujours en cours...", "#ec4899"),
-    ("Bienvenue sur mon GitHub !", "#0891b2"),
-]
-TW, TH, FS, CW = 760, 54, 26, 15.6     # CW = largeur imposee d'un caractere (textLength)
-SLOT, TYPE, HOLD_END, ERASE = 4.5, 0.07, 3.6, 0.025
-T = SLOT * len(PHRASES)
-X0 = (TW - max(len(p) for p, _ in PHRASES) * CW) / 2
-
-texts, cursor_pts = [], [(0.0, 0.0)]
-for i, (p, color) in enumerate(PHRASES):
-    s, n = i * SLOT, len(p)
-    pts = [(0.0, 0.0), (s, 0.0)]
-    pts += [(s + c * TYPE, c * CW) for c in range(1, n + 1)]
-    end_type = s + n * TYPE
-    pts += [(s + HOLD_END + c * ERASE, (n - c) * CW) for c in range(1, n + 1)]
-    pts = sorted(set(pts))
-    cursor_pts += pts[1:]
-    kt = ";".join(f"{t / T:.4f}" for t, _ in pts)
-    vs = ";".join(f"{w:.1f}" for _, w in pts)
-    texts.append(f'''<clipPath id="c{i}"><rect x="{X0:.1f}" y="0" height="{TH}" width="0">
-    <animate attributeName="width" values="{vs}" keyTimes="{kt}" calcMode="discrete" dur="{T}s" repeatCount="indefinite"/></rect></clipPath>
-  <text clip-path="url(#c{i})" x="{X0:.1f}" y="{TH / 2 + FS * 0.36:.1f}" textLength="{n * CW:.1f}" lengthAdjust="spacingAndGlyphs" fill="{color}">{p}</text>''')
-
-cursor_pts = sorted(set(cursor_pts))
-ckt = ";".join(f"{t / T:.4f}" for t, _ in cursor_pts)
-cvs = ";".join(f"{X0 + w + 3:.1f}" for _, w in cursor_pts)
-typing = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{TW}" height="{TH}" viewBox="0 0 {TW} {TH}">
-<g font-family="Consolas, 'Cascadia Mono', 'Courier New', monospace" font-size="{FS}" font-weight="600">
-  {"".join(texts)}
-</g>
-<rect y="{TH / 2 - FS / 2:.1f}" width="3" height="{FS}" fill="#ec4899">
-  <animate attributeName="x" values="{cvs}" keyTimes="{ckt}" calcMode="discrete" dur="{T}s" repeatCount="indefinite"/>
-  <animate attributeName="opacity" values="1;0" dur="0.9s" calcMode="discrete" repeatCount="indefinite"/>
-</rect>
-</svg>
-'''
-
-for name, svg in (("header.svg", header), ("typing.svg", typing)):
-    with open(os.path.join(ROOT, name), "w", encoding="utf-8", newline="\n") as f:
-        f.write(svg)
-    print(name, len(svg.encode()), "octets")
+with open(os.path.join(ROOT, "header.svg"), "w", encoding="utf-8", newline="\n") as f:
+    f.write(header)
+print("header.svg", len(header.encode()), "octets")
